@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import Cell from "./Cell";
 import './Board.css';
 
@@ -31,10 +31,17 @@ import './Board.css';
 
 class Board extends Component {
 
+  static defaultProps = {
+    nrows: 5,
+    ncols: 5
+  }
+
   constructor(props) {
     super(props);
-
+    this.state = { hasWon: false, board: this.createBoard() }
     // TODO: set initial state
+    this.createBoard = this.createBoard.bind(this);
+    this.randomBool = this.randomBool.bind(this);
   }
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
@@ -42,13 +49,26 @@ class Board extends Component {
   createBoard() {
     let board = [];
     // TODO: create array-of-arrays of true/false values
+    for (let i = 0; i < this.props.nrows; i++) {
+      let row = [];
+      for (let j = 0; j < this.props.ncols; j++) {
+        row.push(this.randomBool());
+      }
+      board.push(row);
+    }
+    console.log(board);
     return board
   }
 
+  randomBool() {
+    let val = Math.random();
+    if (val > 0.3) return true
+    else return false;
+  }
   /** handle changing a cell: update board & determine if winner */
 
   flipCellsAround(coord) {
-    let {ncols, nrows} = this.props;
+    let { ncols, nrows } = this.props;
     let board = this.state.board;
     let [y, x] = coord.split("-").map(Number);
 
@@ -66,14 +86,33 @@ class Board extends Component {
     // win when every cell is turned off
     // TODO: determine is the game has been won
 
-    this.setState({board, hasWon});
+    // this.setState({ board, hasWon });
   }
 
 
   /** Render game board or winning message. */
 
   render() {
+    let tableContent = [];
+    let row = [];
+    for (let x = 0; x < this.props.nrows; x++) {
+      for (let y = 0; y < this.props.ncols; y++) {
+        row.push(<Cell key={`${x}-${y}`} isLit={this.state.board[x][y]} />);
+      }
+      tableContent.push(<tr>{row}</tr>);
+      row = [];
+    }
 
+    return (
+      <div className="Board">
+        <h1>LIGHTS OUT</h1>
+        <table>
+          <tbody>
+            {tableContent}
+          </tbody>
+        </table>
+      </div>
+    )
     // if the game is won, just show a winning msg & render nothing else
 
     // TODO
