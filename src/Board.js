@@ -42,6 +42,7 @@ class Board extends Component {
     // TODO: set initial state
     this.createBoard = this.createBoard.bind(this);
     this.randomBool = this.randomBool.bind(this);
+    this.flipCellsAround = this.flipCellsAround.bind(this);
   }
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
@@ -69,17 +70,18 @@ class Board extends Component {
 
   flipCellsAround(coord) {
     let { ncols, nrows } = this.props;
-    let board = this.state.board;
-    let [y, x] = coord.split("-").map(Number);
+    let newBoard = this.state.board;
+    let [x, y] = coord.split("-").map(Number);
 
-
-    function flipCell(y, x) {
+    function flipCell(x, y) {
       // if this coord is actually on board, flip it
-
+      console.log("INSIDE");
       if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
-        board[y][x] = !board[y][x];
+        newBoard[y][x] = !newBoard[y][x];
       }
     }
+
+    flipCell(y, x);
 
     // TODO: flip this cell and the cells around it
 
@@ -87,6 +89,7 @@ class Board extends Component {
     // TODO: determine is the game has been won
 
     // this.setState({ board, hasWon });
+    this.setState({ board: newBoard });
   }
 
 
@@ -95,11 +98,11 @@ class Board extends Component {
   render() {
     let tableContent = [];
     let row = [];
-    for (let x = 0; x < this.props.nrows; x++) {
-      for (let y = 0; y < this.props.ncols; y++) {
-        row.push(<Cell key={`${x}-${y}`} isLit={this.state.board[x][y]} />);
+    for (let y = 0; y < this.props.nrows; y++) {
+      for (let x = 0; x < this.props.ncols; x++) {
+        row.push(<Cell key={`${x}-${y}`} isLit={this.state.board[x][y]} flipCellsAround={() => this.flipCellsAround(`${x}-${y}`)} />);
       }
-      tableContent.push(<tr>{row}</tr>);
+      tableContent.push(<tr key={y}>{row}</tr>);
       row = [];
     }
 
@@ -113,13 +116,6 @@ class Board extends Component {
         </table>
       </div>
     )
-    // if the game is won, just show a winning msg & render nothing else
-
-    // TODO
-
-    // make table board
-
-    // TODO
   }
 }
 

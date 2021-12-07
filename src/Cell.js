@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import "./Cell.css"
 
 
@@ -23,14 +23,14 @@ class Cell extends Component {
 
   handleClick(evt) {
     // call up to the board to flip cells around this cell
-    this.props.flipCellsAroundMe();
+    this.props.flipCellsAround(this._reactInternalFiber.key);
+    console.log(this._reactInternalFiber.key);
   }
 
   render() {
     let classes = "Cell" + (this.props.isLit ? " Cell-lit" : "");
-
     return (
-        <td className={classes} onClick={this.handleClick} />
+      <td className={classes} onClick={this.handleClick} />
     )
   }
 }
