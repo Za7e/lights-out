@@ -76,11 +76,14 @@ class Board extends Component {
       row = [];
     }
 
-    if (this.state.hasWon) tableContent = <h1>YOU WIN!!</h1>
+    if (this.state.hasWon) tableContent = <tr><td><div className="container"><h1 className="flux">YOU</h1><h1 className="neon">WIN!</h1></div></td></tr>
 
     return (
       <div className="Board">
-        <h1>LIGHTS OUT</h1>
+        <div className="container">
+          <div className="neon">Lights </div>
+          <div className="flux">Out </div>
+        </div>
         <table>
           <tbody>
             {tableContent}
